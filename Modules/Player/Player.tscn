@@ -276,6 +276,8 @@ position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_1xfgk")
 
 [node name="Area2D" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 18
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0, 2)
@@ -283,5 +285,10 @@ shape = SubResource("RectangleShape2D_1xfgk")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -50)
+limit_left = -100
+limit_right = 2500
+limit_top = -400
+limit_bottom = 800
+enabled = true
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

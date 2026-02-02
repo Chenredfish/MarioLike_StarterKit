@@ -14,6 +14,7 @@ extends CharacterBody2D
 var health: int
 var is_dead: bool = false
 var is_invincible: bool = false  # 無敵狀態
+var score: int = 0  # 玩家分數
 
 # 取得重力值
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -26,7 +27,8 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 # 訊號
 signal health_changed(new_health)
 signal player_died
-signal coin_collected
+signal coin_collected(score)
+signal score_changed(new_score)
 
 func _ready():
 	health = max_health
@@ -119,8 +121,11 @@ func die():
 	queue_free()  # 直接刪除角色
 
 # 收集金幣函數
-func collect_coin():
-	coin_collected.emit()
+func collect_coin(value: int = 1):
+	score += value
+	print("Score: ", score)
+	coin_collected.emit(score)
+	score_changed.emit(score)
 
 # 啟動無敵時間的循環動畫
 func start_invincibility_animation():
@@ -156,18 +161,26 @@ func reset():
 	health = max_health
 	is_dead = false
 	is_invincible = false
+	score = 0
 	velocity = Vector2.ZERO
 	if animated_sprite:
 		animated_sprite.play("idle")
 		animated_sprite.modulate = Color.WHITE  # 確保顏色正常
 	health_changed.emit(health)
+	score_changed.emit(score)
 
 # 區域檢測（僅用於收集物品）
 func _on_area_2d_area_entered(area):
-	# 檢查是否為可收集物品
-	if area.get_parent().has_method("collect"):
-		area.get_parent().collect()
-		coin_collected.emit()
+	# 檢查是否為可收集物品（直接檢查area本身）
+	if area.has_method("collect"):
+		var item = area
+		item.collect()
+		
+		# 如果是金幣，增加分數
+		if "coin_value" in item:
+			collect_coin(item.coin_value)
+		else:
+			coin_collected.emit(score)  # 其他物品也發送信號
 
 # 鏡頭控制函數
 func set_camera_smoothing(enabled: bool):
