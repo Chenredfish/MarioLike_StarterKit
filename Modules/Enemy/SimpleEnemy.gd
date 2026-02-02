@@ -16,6 +16,8 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 # 節點引用
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var collision_shape = $CollisionShape2D
+@onready var wall_raycast = $WallRayCast
+@onready var ground_raycast = $GroundRayCast
 
 func _ready():
 	# 記錄起始位置
@@ -41,20 +43,41 @@ func _physics_process(delta):
 	move_and_slide()
 
 func patrol():
-	# 計算當前距離起始位置的距離
+	# 更新射線方向
+	update_raycasts()
+	
+	# 檢查是否需要轉向
+	var should_turn = false
+	
+	# 1. 檢查前方是否有牆壁
+	if wall_raycast.is_colliding():
+		should_turn = true
+	
+	# 2. 檢查前方是否有地面（避免掉落）
+	if not ground_raycast.is_colliding():
+		should_turn = true
+	
+	# 3. 檢查是否到達巡邏範圍邊界
 	var distance_from_start = global_position.x - start_position.x
+	if distance_from_start >= patrol_range or distance_from_start <= -patrol_range:
+		should_turn = true
 	
-	# 如果到達右邊界，轉向左
-	if distance_from_start >= patrol_range:
-		direction = -1
+	# 執行轉向
+	if should_turn:
+		direction *= -1
 		if animated_sprite:
-			animated_sprite.flip_h = true
+			animated_sprite.flip_h = direction < 0
+
+# 更新射線檢測的方向
+func update_raycasts():
+	if wall_raycast:
+		# 牆壁檢測：向前方射出
+		wall_raycast.target_position = Vector2(20 * direction, 0)
 	
-	# 如果到達左邊界，轉向右
-	elif distance_from_start <= -patrol_range:
-		direction = 1
-		if animated_sprite:
-			animated_sprite.flip_h = false
+	if ground_raycast:
+		# 地面檢測：從前方向下射出
+		ground_raycast.position = Vector2(16 * direction, 0)
+		ground_raycast.target_position = Vector2(0, 20)
 
 # 傷害玩家的函數
 func damage_player():
