@@ -1,6 +1,22 @@
-[gd_scene load_steps=2 format=3 uid="uid://scsds02q56xs"]
+[gd_scene load_steps=5 format=3 uid="uid://scsds02q56xs"]
 
 [ext_resource type="Script" uid="uid://cgqp5mqytw8nn" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://bdkrp8spxglh2" path="res://Modules/Player/Player.tscn" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://b6i501k3xu86f" path="res://Modules/level/level_0.tscn" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://d25r6whtqwaal" path="res://Modules/Enemy/SimpleEnemy.tscn" id="4_enemy"]
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_ig7tw")
+
+[node name="level_0" parent="." instance=ExtResource("2_h2yge")]
+
+[node name="Player" parent="." instance=ExtResource("2_0xm2m")]
+position = Vector2(622, 229)
+
+[node name="SimpleEnemy" parent="." instance=ExtResource("4_enemy")]
+position = Vector2(400, 300)
+scale = Vector2(2, 2)
+
+[node name="SimpleEnemy2" parent="." instance=ExtResource("4_enemy")]
+position = Vector2(800, 300)
+scale = Vector2(2, 2)
