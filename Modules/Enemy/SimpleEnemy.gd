@@ -20,6 +20,9 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var ground_raycast = $GroundRayCast
 
 func _ready():
+	# 場景基礎設置初始化
+	_initialize_scene_settings()
+	
 	# 記錄起始位置
 	start_position = global_position
 	# 計算巡邏範圍（5格 = 5 * 32 = 160像素）
@@ -28,6 +31,31 @@ func _ready():
 	# 設定初始動畫
 	if animated_sprite:
 		animated_sprite.play("walk")
+
+# 場景基礎設置初始化
+func _initialize_scene_settings():
+	# CharacterBody2D 基礎設定
+	collision_layer = 2  # 敵人在第2層
+	collision_mask = 1   # 檢測第1層(環境)
+	
+	# Area2D 碰撞設定
+	var area_2d = get_node_or_null("Area2D")
+	if area_2d:
+		area_2d.collision_layer = 2  # 敵人檢測器在第2層
+		area_2d.collision_mask = 8   # 檢測第4層(玩家)
+		# 連接信號
+		if not area_2d.area_entered.is_connected(_on_area_2d_area_entered):
+			area_2d.area_entered.connect(_on_area_2d_area_entered)
+	
+	# RayCast2D 設定
+	if wall_raycast:
+		wall_raycast.target_position = Vector2(20, 0)
+		wall_raycast.collision_mask = 1
+	
+	if ground_raycast:
+		ground_raycast.position = Vector2(16, 0)
+		ground_raycast.target_position = Vector2(0, 20)
+		ground_raycast.collision_mask = 1
 
 func _physics_process(delta):
 	# 添加重力處理

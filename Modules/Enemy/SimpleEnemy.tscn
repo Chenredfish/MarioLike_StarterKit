@@ -103,7 +103,6 @@ size = Vector2(30, 30)
 
 [node name="SimpleEnemy" type="CharacterBody2D"]
 collision_layer = 2
-collision_mask = 1
 script = ExtResource("1_enemy")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -122,11 +121,9 @@ shape = SubResource("RectangleShape2D_area")
 
 [node name="WallRayCast" type="RayCast2D" parent="."]
 target_position = Vector2(20, 0)
-collision_mask = 1
 
 [node name="GroundRayCast" type="RayCast2D" parent="."]
-position = Vector2(16, 0)
+position = Vector2(189, -5)
 target_position = Vector2(0, 20)
-collision_mask = 1
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

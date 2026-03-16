@@ -32,6 +32,10 @@ signal score_changed(new_score)
 
 func _ready():
 	health = max_health
+	
+	# 場景基礎設置初始化
+	_initialize_scene_settings()
+	
 	# 設定初始動畫
 	if animated_sprite:
 		animated_sprite.play("idle")
@@ -44,6 +48,30 @@ func _ready():
 			camera.position_smoothing_enabled = true
 			camera.position_smoothing_speed = camera_speed
 		camera.offset = camera_offset
+
+# 場景基礎設置初始化
+func _initialize_scene_settings():
+	# CharacterBody2D 基礎設定
+	scale = Vector2(2, 2)
+	collision_layer = 4  # 玩家在第4層
+	
+	# Area2D 碰撞設定
+	var area_2d = get_node_or_null("Area2D")
+	if area_2d:
+		area_2d.collision_layer = 8  # 玩家檢測器在第4層
+		area_2d.collision_mask = 18  # 檢測第2層(敵人) + 第5層(物品)
+		# 連接信號
+		if not area_2d.area_entered.is_connected(_on_area_2d_area_entered):
+			area_2d.area_entered.connect(_on_area_2d_area_entered)
+	
+	# Camera2D 邊界設定
+	if camera:
+		camera.position = Vector2(0, -50)
+		camera.limit_left = -100
+		camera.limit_right = 2500
+		camera.limit_top = -400
+		camera.limit_bottom = 800
+		camera.enabled = true
 
 func _physics_process(delta):
 	if is_dead:

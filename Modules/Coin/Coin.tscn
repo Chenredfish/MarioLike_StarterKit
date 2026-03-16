@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cn7k2m8p5rar1"]
 
-[ext_resource type="Script" uid="uid://bfk9x7m3n2p4q" path="res://Modules/Coin/Coin.gd" id="1_coin"]
+[ext_resource type="Script" uid="uid://bflax7m3n2p4q" path="res://Modules/Coin/Coin.gd" id="1_coin"]
 [ext_resource type="Texture2D" uid="uid://bwkvgntq5ra1l" path="res://assets/Items/Fruits/Apple.png" id="2_apple"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_coin"]
@@ -25,7 +25,6 @@ radius = 12.0
 collision_layer = 16
 collision_mask = 8
 script = ExtResource("1_coin")
-coin_value = 1
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_coin")
