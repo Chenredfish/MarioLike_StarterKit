@@ -1,0 +1,22 @@
+[gd_scene load_steps=6 format=3 uid="uid://bf2v1x4tjsatx"]
+
+[ext_resource type="Script" uid="uid://cw432mr6non6p" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://bxhtalsm6hsue" path="res://player.tscn" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://xjahrkxd55fa" path="res://level_0.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://s65af4tsc02v" path="res://simple_enemy.tscn" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://cu1vs8blsudx1" path="res://coin.tscn" id="5_lquwl"]
+
+[node name="main" type="Node2D"]
+script = ExtResource("1_ig7tw")
+
+[node name="Player" parent="." instance=ExtResource("2_0xm2m")]
+position = Vector2(148, 556)
+
+[node name="level_0" parent="." instance=ExtResource("3_h2yge")]
+
+[node name="SimpleEnemy" parent="." instance=ExtResource("4_1bvp3")]
+position = Vector2(735, 541)
+scale = Vector2(2, 2)
+
+[node name="Coin" parent="." instance=ExtResource("5_lquwl")]
+position = Vector2(183, 386)
